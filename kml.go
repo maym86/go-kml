@@ -505,6 +505,9 @@ func PhoneNumber(value string) *SimpleElement { return newSEString("phoneNumber"
 // Placemark returns a new Placemark element.
 func Placemark(children ...Element) *CompoundElement { return newCE("Placemark", children) }
 
+// Placemark returns a new Placemark element.
+func PlacemarkID(id string, children ...Element) *CompoundElement { return newCEID("Placemark", id, children) }
+
 // Point returns a new Point element.
 func Point(children ...Element) *CompoundElement { return newCE("Point", children) }
 
@@ -847,6 +850,23 @@ func newSETime(name string, value time.Time) *SimpleElement {
 		value:        value.Format(time.RFC3339),
 	}
 }
+
+func newCEID(name string, id string, children []Element) *CompoundElement {
+
+	var attr []xml.Attr
+	if id != "" {
+		attr = append(attr, xml.Attr{Name: xml.Name{Local: "id"}, Value: id})
+	}
+
+	return &CompoundElement{
+		StartElement: xml.StartElement{
+			Name: xml.Name{Local: name},
+			Attr: attr,
+		},
+		children: children,
+	}
+}
+
 
 func newCE(name string, children []Element) *CompoundElement {
 	return &CompoundElement{
